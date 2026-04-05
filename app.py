@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
 import re
-
+st.write("App started")
 # Load model and vectorizer
 model = pickle.load(open("model.pkl", "rb"))
 vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
