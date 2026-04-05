@@ -12,26 +12,27 @@ def clean_text(text):
     text = re.sub(r"[^a-zA-Z]", " ", text)
     return text
 
-# Prediction function
+# Prediction function (FIXED)
 def predict_review(text):
     text_clean = clean_text(text)
 
-    # Handle empty input after cleaning
+    # Handle empty input
     if text_clean.strip() == "":
         return "Invalid input ❗ Please enter meaningful text."
 
     text_vec = vectorizer.transform([text_clean])
 
-    prediction = model.predict(text_vec)[0]
+    prediction = model.predict(text_vec)
+    pred_value = int(prediction[0])
 
-    # Handle probability safely
+    # Safe confidence calculation
     if hasattr(model, "predict_proba"):
-        prob = model.predict_proba(text_vec)[0]
-        confidence = prob[prediction] * 100
+        prob = model.predict_proba(text_vec)
+        confidence = max(prob[0]) * 100
     else:
         confidence = 0
 
-    if prediction == 1:
+    if pred_value == 1:
         return f"Fake Review ❌ ({confidence:.2f}%)"
     else:
         return f"Real Review ✅ ({confidence:.2f}%)"
